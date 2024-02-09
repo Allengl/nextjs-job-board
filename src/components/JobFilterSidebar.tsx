@@ -10,7 +10,6 @@ import { redirect } from "next/navigation";
 
 async function filterJobs(formData: FormData) {
   "use server";
-
   const values = Object.fromEntries(formData.entries());
 
   const { q, type, location, remote } = jobFilterSchema.parse(values);
