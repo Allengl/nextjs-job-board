@@ -1,6 +1,8 @@
 "use client";
 
-import H1 from "@/components/h1";
+import LoadingButton from "@/components/LoadingButton";
+import LocationInput from "@/components/LocationInput";
+import RichTextEditor from "@/components/RichTextEditor";
 import {
   Form,
   FormControl,
@@ -9,22 +11,20 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { CreateJobValues, createJobSchema } from "@/lib/validation";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import Select from "@/components/ui/select";
 import { jobTypes, locationTypes } from "@/lib/job-types";
-import LocationInput from "@/components/LocationInput";
+import { CreateJobValues, createJobSchema } from "@/lib/validation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import RichTextEditor from "@/components/RichTextEditor";
 import { draftToMarkdown } from "markdown-draft-js";
-import LoadingButton from "@/components/LoadingButton";
-import createJobPosting from "./actions";
+import { useForm } from "react-hook-form";
+import { createJobPosting } from "./actions";
+import H1 from "@/components/h1";
 
-const NewJobForm = () => {
+export default function NewJobForm() {
   const form = useForm<CreateJobValues>({
     resolver: zodResolver(createJobSchema),
   });
@@ -39,7 +39,7 @@ const NewJobForm = () => {
     formState: { isSubmitting },
   } = form;
 
-  const onSubmit = async (values: CreateJobValues) => {
+  async function onSubmit(values: CreateJobValues) {
     const formData = new FormData();
 
     Object.entries(values).forEach(([key, value]) => {
@@ -53,7 +53,7 @@ const NewJobForm = () => {
     } catch (error) {
       alert("Something went wrong, please try again.");
     }
-  };
+  }
 
   return (
     <main className="m-auto my-10 max-w-3xl space-y-10">
@@ -81,7 +81,7 @@ const NewJobForm = () => {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Job Title</FormLabel>
+                  <FormLabel>Job title</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g. Frontend Developer" {...field} />
                   </FormControl>
@@ -94,7 +94,7 @@ const NewJobForm = () => {
               name="type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Job Type</FormLabel>
+                  <FormLabel>Job type</FormLabel>
                   <FormControl>
                     <Select {...field} defaultValue="">
                       <option value="" hidden>
@@ -118,7 +118,7 @@ const NewJobForm = () => {
                 <FormItem>
                   <FormLabel>Company</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. Frontend Developer" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -192,11 +192,9 @@ const NewJobForm = () => {
                     <div className="flex items-center gap-1">
                       <button
                         type="button"
-                        onClick={() =>
-                          setValue("location", "", {
-                            shouldValidate: true,
-                          })
-                        }
+                        onClick={() => {
+                          setValue("location", "", { shouldValidate: true });
+                        }}
                       >
                         <X size={20} />
                       </button>
@@ -214,7 +212,7 @@ const NewJobForm = () => {
                   control={control}
                   name="applicationEmail"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="grow">
                       <FormControl>
                         <div className="flex items-center">
                           <Input
@@ -223,7 +221,7 @@ const NewJobForm = () => {
                             type="email"
                             {...field}
                           />
-                          <span className="mx-2 ">or</span>
+                          <span className="mx-2">or</span>
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -246,6 +244,7 @@ const NewJobForm = () => {
                           }}
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -292,6 +291,4 @@ const NewJobForm = () => {
       </div>
     </main>
   );
-};
-
-export default NewJobForm;
+}
