@@ -24,7 +24,7 @@ export const generateMetadata = async ({
   const job = await getJob(slug);
 
   return {
-    title: job?.title,
+    title: job.title,
   };
 };
 
